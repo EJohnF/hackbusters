@@ -23,7 +23,7 @@ function App() {
   return (
     <div className="App">
         <DataContext.Provider value={{submissions: data}}>
-        <Title level={2} type={'success'}>Hack Busters</Title>
+        <Title level={2} type={'success'}>E.mission</Title>
           <Layout.Content style={{
               margin: '50px auto',
               maxWidth: '850px'
