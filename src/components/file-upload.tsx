@@ -1,10 +1,12 @@
 import {Button, Upload, message, Input, InputRef, Progress, Dropdown, Spin} from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import Title from "antd/es/typography/Title";
-import React, { useRef, useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
 import {serverLink} from "../data/server";
 import {fetchData} from "../data";
+import {useSubmissions} from "../data/data-context";
+import dayjs, {Dayjs} from "dayjs";
 
 const defaultFiles = [
     {
@@ -34,7 +36,28 @@ export const FileUpload = () => {
     const [fileList, setFileList] = useState<RcFile[]>([]);
     const [uploading, setUploading] = useState(false);
 
+    const submissions = useSubmissions();
+    const initialSubmissions = useRef(0)
+    const submitTimestamp = useRef<Dayjs>()
     const inputRef = useRef<InputRef>(null)
+
+    useEffect(() => {
+        if (submitTimestamp) {
+            if (submissions.find(e => e.name === inputRef?.current?.input?.value)) {
+                //    new data came
+                submitTimestamp.current = undefined;
+                message.success('Submitted successfully.')
+                setUploading(false);
+            } else {
+                if (dayjs().diff(submitTimestamp.current, 'second') > 120) {
+                    // waited 2 min and no more data came
+                    message.error('Submit failed.')
+                    submitTimestamp.current = undefined;
+                    setUploading(false);
+                }
+            }
+        }
+    }, [submissions])
 
     const handleUpload = async () => {
         if (!inputRef?.current?.input?.value) {
@@ -50,7 +73,8 @@ export const FileUpload = () => {
         formData.append('file', fileList[0] as RcFile);
         setUploading(true);
         // You can use any AJAX library you like
-        const initialSubmissions = (await fetchData()).length;
+        initialSubmissions.current = submissions.length;
+        submitTimestamp.current = dayjs()
         fetch(`${serverLink}/submission?name_solution=${inputRef?.current?.input?.value}`, {
             method: 'POST',
             body: formData,
@@ -58,23 +82,6 @@ export const FileUpload = () => {
                 "Bypass-Tunnel-Reminder": 'true'
             },
         })
-        let timeoutCounter = 24;
-        const interval = setInterval(async () => {
-            const numSubmissions = (await fetchData()).length;
-            if (numSubmissions > initialSubmissions) {
-                setUploading(false);
-                clearInterval(interval)
-                message.success('Submitted successfully.')
-                return;
-            }
-
-            timeoutCounter--;
-            if (timeoutCounter <= 0) {
-                clearInterval(interval);
-                setUploading(false);
-                message.error('Submit failed.')
-            }
-        }, 5000)
     };
 
     if (uploading) return <Spin size={'large'} />

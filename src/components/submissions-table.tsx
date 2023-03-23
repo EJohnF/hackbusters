@@ -4,6 +4,7 @@ import {useMemo} from "react";
 import {EvaluatedSubmission, evaluateSubmission} from "../data/calculations";
 import {ColumnsType} from "antd/lib/table";
 import Paragraph from "antd/es/typography/Paragraph";
+import {useSubmissions} from "../data/data-context";
 
 const columns: ColumnsType<EvaluatedSubmission> = [
     {
@@ -40,11 +41,12 @@ const columns: ColumnsType<EvaluatedSubmission> = [
     },
 ];
 
-export const SubmissionsTable = (data: Data) => {
+export const SubmissionsTable = ({numberOfRuns}: {numberOfRuns: number}) => {
+    const submissions = useSubmissions();
     const evaluatedSubmissions = useMemo(() => {
-        const bestScore = data.submissions.sort((a,b) => b.score - a.score)[0];
-        const evaluated = data.submissions.map((submission) => ({
-            ...evaluateSubmission(submission, bestScore, data.numberOfRuns || 1),
+        const bestScore = submissions.sort((a,b) => b.score - a.score)[0];
+        const evaluated = submissions.map((submission) => ({
+            ...evaluateSubmission(submission, bestScore, numberOfRuns || 1),
         }));
         const bestAggregated = evaluated.sort((a, b) => b.aggregatedScore - a.aggregatedScore)[0]
 
@@ -52,7 +54,7 @@ export const SubmissionsTable = (data: Data) => {
             ...submission,
             isBest: submission.name === bestAggregated.name
         })))
-    }, [data]);
+    }, [submissions, numberOfRuns]);
 
     return <Table dataSource={evaluatedSubmissions} columns={columns} />;
 }
