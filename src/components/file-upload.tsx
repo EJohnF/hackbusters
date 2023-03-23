@@ -56,6 +56,17 @@ export const FileUpload = () => {
             });
     };
 
+    const prepareExampleUploadFile = () => {
+        fetch('/example_model.py')
+            .then(res => {
+                console.log(res);
+                return res.text()
+            }).then(v =>
+                console.log(new Blob([v], {
+                    type: 'text/plain'
+                })))
+    }
+
     return (
         <div style={{ display: 'flex', flexDirection: "column", gap: '8px' }}>
             <Title level={3}>Upload your model to compete with others!</Title>
