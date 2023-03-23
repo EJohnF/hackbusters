@@ -14,7 +14,7 @@ const columns: ColumnsType<EvaluatedSubmission> = [
         sorter: (a, b) => a.name.length - b.name.length,
     },
     {
-        title: 'Score',
+        title: 'Accuracy',
         dataIndex: 'accuracy',
         key: 'accuracy',
         defaultSortOrder: 'descend',
@@ -27,7 +27,7 @@ const columns: ColumnsType<EvaluatedSubmission> = [
         sorter: (a, b) => a.emissions - b.emissions,
     },
     {
-        title: 'Aggregated',
+        title: 'Score',
         dataIndex: 'score',
         key: 'score',
         sorter: (a, b) => a.score - b.score,
