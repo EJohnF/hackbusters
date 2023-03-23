@@ -1,3 +1,4 @@
+// @ts-nocheck
 import colorLib from '@kurkle/color'
 import { DateTime } from 'luxon'
 import 'chartjs-adapter-luxon'
