@@ -1,21 +1,38 @@
-import { Button, Upload, message, Input, InputRef, Progress } from "antd";
+import {Button, Upload, message, Input, InputRef, Progress, Dropdown} from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import Title from "antd/es/typography/Title";
 import React, { useRef, useState } from "react";
 import { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
 
+const defaultFiles = [
+    {
+        key: '1',
+        label: 'KNN',
+        file: '/example_model.py'
+    },
+    {
+        key: '2',
+        label: 'SVM',
+        file: '/example_model.py'
+    },
+    {
+        key: '3',
+        label: 'Linear regression',
+        file: '/example_model.py'
+    },
+]
+
+const prepareExampleUploadFile = async (filename: string) => {
+    const file = await fetch(filename);
+    const text = await file.text();
+    return new File([text], filename)
+}
+
 export const FileUpload = () => {
-    const [fileList, setFileList] = useState<UploadFile[]>([]);
+    const [fileList, setFileList] = useState<RcFile[]>([]);
     const [uploading, setUploading] = useState(false);
 
     const inputRef = useRef<InputRef>(null)
-    const props: UploadProps = {
-        beforeUpload: (file) => {
-            setFileList([file]);
-            return false;
-        },
-        fileList,
-    };
 
     const handleUpload = () => {
         if (!inputRef?.current?.input?.value) {
@@ -56,17 +73,6 @@ export const FileUpload = () => {
             });
     };
 
-    const prepareExampleUploadFile = () => {
-        fetch('/example_model.py')
-            .then(res => {
-                console.log(res);
-                return res.text()
-            }).then(v =>
-                console.log(new Blob([v], {
-                    type: 'text/plain'
-                })))
-    }
-
     return (
         <div style={{ display: 'flex', flexDirection: "column", gap: '8px' }}>
             <Title level={3}>Upload your model to compete with others!</Title>
@@ -74,10 +80,34 @@ export const FileUpload = () => {
                 <Input ref={inputRef} placeholder={"Team name"} />
                 <Button onClick={handleUpload}>Submit</Button>
             </div>
-            <Upload {...props}>
-                <Button icon={<UploadOutlined />}>Click to Upload</Button>
-            </Upload>
-            {/* {uploading && <Progress type="circle" percent={100} strokeColor={{ '0%': '#108ee9', '100%': '#87d068' }} />} */}
+                <Upload {...{
+                    beforeUpload: (file) => {
+                        setFileList([file]);
+                        return false;
+                    },
+                    onRemove: () => setFileList([]),
+                    fileList,
+                    maxCount: 1,
+                }}>
+                    <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '16px'}}>
+                    <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                    or
+                    <Dropdown
+                        menu={{
+                            items: defaultFiles,
+                            onClick: async ({key, domEvent}) => {
+                                domEvent.stopPropagation();
+                                const file = defaultFiles.find(e => e.key === key)?.file
+                                setFileList([(await prepareExampleUploadFile(file!)) as RcFile]);
+                            },
+                        }}
+                        placement="bottomLeft"
+                        arrow
+                    >
+                        <Button onClick={(e) => e.stopPropagation()}>Choose from library</Button>
+                    </Dropdown>
+                    </div>
+                </Upload>
         </div>
     )
 }
