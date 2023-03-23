@@ -1,4 +1,4 @@
-import { Button, Upload, message, Input, InputRef } from "antd";
+import { Button, Upload, message, Input, InputRef, Progress } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import Title from "antd/es/typography/Title";
 import React, { useRef, useState } from "react";
@@ -10,18 +10,6 @@ export const FileUpload = () => {
 
     const inputRef = useRef<InputRef>(null)
     const props: UploadProps = {
-        // @ts-ignore
-        onChange(info) {
-            console.log(info)
-            if (info.file.status !== 'uploading') {
-                console.log(info.file, info.fileList);
-            }
-            if (info.file.status === 'done') {
-                message.success(`${info.file.name} file uploaded successfully`);
-            } else if (info.file.status === 'error') {
-                message.error(`${info.file.name} file upload failed`);
-            }
-        },
         beforeUpload: (file) => {
             setFileList([file]);
             return false;
@@ -78,6 +66,7 @@ export const FileUpload = () => {
             <Upload {...props}>
                 <Button icon={<UploadOutlined />}>Click to Upload</Button>
             </Upload>
+            {/* {uploading && <Progress type="circle" percent={100} strokeColor={{ '0%': '#108ee9', '100%': '#87d068' }} />} */}
         </div>
     )
 }
