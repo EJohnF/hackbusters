@@ -29,7 +29,7 @@ def check_soluiton(input_df_name):
     model.eval()
     transform = create_transform(**resolve_data_config(model.pretrained_cfg, model=model))
     l_data = df.imgs_path
-    batch_size = 64
+    batch_size = 32
     # Compute how many batches are needed
     batches = math.ceil(len(l_data) / batch_size)
     pred_l = []
@@ -39,4 +39,5 @@ def check_soluiton(input_df_name):
         batch_probas = compute_batch(batch_files, transform, model)
         pred_l.append(batch_probas.cpu())
     df['predictions'] = np.vstack(pred_l)
+    del model
     df.to_csv('predict_submission.csv')
