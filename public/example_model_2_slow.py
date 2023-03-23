@@ -29,7 +29,7 @@ def check_soluiton(input_df_name):
     model.eval()
     transform = create_transform(**resolve_data_config(model.pretrained_cfg, model=model))
     l_data = df.imgs_path
-    batch_size = 64
+    batch_size = 32
     # Compute how many batches are needed
     batches = math.ceil(len(l_data) / batch_size)
     pred_l = []
