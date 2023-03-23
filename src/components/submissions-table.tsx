@@ -14,11 +14,11 @@ const columns: ColumnsType<EvaluatedSubmission> = [
         sorter: (a, b) => a.name.length - b.name.length,
     },
     {
-        title: 'Score',
-        dataIndex: 'score',
-        key: 'score',
+        title: 'Accuracy',
+        dataIndex: 'accuracy',
+        key: 'accuracy',
         defaultSortOrder: 'descend',
-        sorter: (a, b) => a.score - b.score,
+        sorter: (a, b) => a.accuracy - b.accuracy,
     },
     {
         title: 'Emissions',
@@ -27,10 +27,10 @@ const columns: ColumnsType<EvaluatedSubmission> = [
         sorter: (a, b) => a.emissions - b.emissions,
     },
     {
-        title: 'Aggregated',
-        dataIndex: 'aggregatedScore',
-        key: 'aggregatedScore',
-        sorter: (a, b) => a.aggregatedScore - b.aggregatedScore,
+        title: 'Score',
+        dataIndex: 'score',
+        key: 'score',
+        sorter: (a, b) => a.score - b.score,
     },
     {
         title: 'CO2 safe',
@@ -44,11 +44,11 @@ const columns: ColumnsType<EvaluatedSubmission> = [
 export const SubmissionsTable = ({numberOfRuns}: {numberOfRuns: number}) => {
     const submissions = useSubmissions();
     const evaluatedSubmissions = useMemo(() => {
-        const bestScore = submissions.sort((a,b) => b.score - a.score)[0];
+        const bestScore = submissions.sort((a,b) => b.accuracy - a.accuracy)[0];
         const evaluated = submissions.map((submission) => ({
             ...evaluateSubmission(submission, bestScore, numberOfRuns || 1),
         }));
-        const bestAggregated = evaluated.sort((a, b) => b.aggregatedScore - a.aggregatedScore)[0]
+        const bestAggregated = evaluated.sort((a, b) => b.score - a.score)[0]
 
         return evaluated.map((submission => ({
             ...submission,
