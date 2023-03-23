@@ -1,0 +1,25 @@
+{
+  "submissions" : [
+    {
+      "name": "Hackers",
+      "score": 0.67,
+      "consumption": 20
+    },
+    {
+      "name": "Busters",
+      "score": 0.66,
+      "consumption": 18
+    },
+    {
+      "name": "Angels",
+      "score": 0.64,
+      "consumption": 15
+    },
+    {
+      "name": "New-York",
+      "score": 0.6,
+      "consumption": 2
+    }
+  ],
+  "numberOfRuns": 100
+}

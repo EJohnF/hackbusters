@@ -1,23 +1,58 @@
+import {Table, Typography} from "antd";
 import {Data} from "../data/type";
+import {useMemo} from "react";
+import {EvaluatedSubmission, evaluateSubmission} from "../data/calculations";
+import {ColumnsType} from "antd/lib/table";
+import Paragraph from "antd/es/typography/Paragraph";
 
-const columns = [
+const columns: ColumnsType<EvaluatedSubmission> = [
     {
         title: 'Team name',
         dataIndex: 'name',
         key: 'name',
+        sorter: (a, b) => a.name.length - b.name.length,
     },
     {
-        title: 'Age',
-        dataIndex: 'age',
-        key: 'age',
+        title: 'Score',
+        dataIndex: 'score',
+        key: 'score',
+        defaultSortOrder: 'descend',
+        sorter: (a, b) => a.score - b.score,
     },
     {
-        title: 'Address',
-        dataIndex: 'address',
-        key: 'address',
+        title: 'Consumption',
+        dataIndex: 'consumption',
+        key: 'consumption',
+        sorter: (a, b) => a.consumption - b.consumption,
+    },
+    {
+        title: 'Aggregated',
+        dataIndex: 'aggregatedScore',
+        key: 'aggregatedScore',
+        sorter: (a, b) => a.aggregatedScore - b.aggregatedScore,
+    },
+    {
+        title: 'CO2 safe',
+        dataIndex: 'co2Safe',
+        key: 'co2Safe',
+        sorter: (a, b) => a.co2Safe - b.co2Safe,
+        render: (_, submission) => <Paragraph type={submission.isBest ? "success": undefined}>{submission.co2Safe} {submission.isBest ? <img src={require('./leaf.png')} alt={'leaf'} style={{width: '16px', height: '16px'}}/>: null}</Paragraph>
     },
 ];
 
-export const Table = (data: Data) => {
-    return
+export const SubmissionsTable = (data: Data) => {
+    const evaluatedSubmissions = useMemo(() => {
+        const bestScore = data.submissions.sort((a,b) => b.score - a.score)[0];
+        const evaluated = data.submissions.map((submission) => ({
+            ...evaluateSubmission(submission, bestScore, data.numberOfRuns),
+        }));
+        const bestAggregated = evaluated.sort((a, b) => b.aggregatedScore - a.aggregatedScore)[0]
+
+        return evaluated.map((submission => ({
+            ...submission,
+            isBest: submission.name === bestAggregated.name
+        })))
+    }, [data]);
+
+    return <Table dataSource={evaluatedSubmissions} columns={columns} />;
 }
