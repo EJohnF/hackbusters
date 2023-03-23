@@ -36,7 +36,7 @@ const columns: ColumnsType<EvaluatedSubmission> = [
         dataIndex: 'co2Safe',
         key: 'co2Safe',
         sorter: (a, b) => a.co2Safe - b.co2Safe,
-        render: (_, submission) => <Paragraph type={submission.isBest ? "success": undefined}>{submission.co2Safe} {submission.isBest ? <img src={require('./leaf.png')} alt={'leaf'} style={{width: '16px', height: '16px'}}/>: null}</Paragraph>
+        render: (_, submission) => <Paragraph key={`co2Safe_${submission.name}`} type={submission.isBest ? "success": undefined}>{submission.co2Safe} {submission.isBest ? <img src={require('./leaf.png')} alt={'leaf'} style={{width: '16px', height: '16px'}}/>: null}</Paragraph>
     },
 ];
 
