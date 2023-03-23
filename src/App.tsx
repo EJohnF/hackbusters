@@ -21,9 +21,9 @@ function App() {
               margin: '50px auto',
               maxWidth: '850px'
           }}>
+              <Charts />
               {data ? <SubmissionsTable {...data} /> : <Spin size={'large'}/>}
               <FileUpload />
-              <Charts />
           </Layout.Content>
     </div>
   );

@@ -15,7 +15,7 @@ const data = {
     // tension: 0.4,
     datasets: [
         {
-            label: 'Dataset 1',
+            label: 'Carbon weighted score',
             data: Utils.numbers(NUMBER_CFG),
             borderColor: Utils.CHART_COLORS.red,
             backgroundColor: Utils.transparentize(Utils.CHART_COLORS.red, 0.5),

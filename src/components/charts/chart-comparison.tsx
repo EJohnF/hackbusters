@@ -46,7 +46,7 @@ const Chart: React.FC = () => {
         plugins: {
             title: {
                 display: true,
-                text: 'Comparison'
+                text: 'Carbon'
             }
         },
         scales: {
