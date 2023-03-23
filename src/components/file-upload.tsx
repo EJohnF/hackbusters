@@ -40,10 +40,11 @@ export const FileUpload = () => {
     const initialSubmissions = useRef(0)
     const submitTimestamp = useRef<Dayjs>()
     const inputRef = useRef<InputRef>(null)
+    const name = useRef<string>();
 
     useEffect(() => {
         if (submitTimestamp.current) {
-            if (submissions.find(e => e.name === inputRef?.current?.input?.value)) {
+            if (submissions.find(e => e.name === name.current)) {
                 //    new data came
                 submitTimestamp.current = undefined;
                 message.success('Submitted successfully.')
@@ -75,6 +76,7 @@ export const FileUpload = () => {
         // You can use any AJAX library you like
         initialSubmissions.current = submissions.length;
         submitTimestamp.current = dayjs()
+        name.current = inputRef?.current?.input?.value;
         fetch(`${serverLink}/submission?name_solution=${inputRef?.current?.input?.value}`, {
             method: 'POST',
             body: formData,
