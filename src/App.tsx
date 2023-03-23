@@ -7,6 +7,7 @@ import {SubmissionsTable} from "./components/submissions-table";
 import {Layout, Spin} from "antd";
 import Title from 'antd/es/typography/Title';
 import {FileUpload} from "./components/file-upload";
+import Charts from './components/charts'
 
 function App() {
   const [data,setData] = useState<Data>()
@@ -22,6 +23,7 @@ function App() {
           }}>
               {data ? <SubmissionsTable {...data} /> : <Spin size={'large'}/>}
               <FileUpload />
+              <Charts />
           </Layout.Content>
     </div>
   );
