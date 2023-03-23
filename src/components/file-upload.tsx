@@ -11,18 +11,18 @@ import dayjs, {Dayjs} from "dayjs";
 const defaultFiles = [
     {
         key: '1',
-        label: 'KNN',
+        label: 'Normal',
         file: '/example_model.py'
     },
     {
         key: '2',
-        label: 'SVM',
-        file: '/example_model.py'
+        label: 'Slow',
+        file: '/example_model_2_slow.py'
     },
     {
         key: '3',
-        label: 'Linear regression',
-        file: '/example_model.py'
+        label: 'Super fast',
+        file: '/example_model_3_fast.py'
     },
 ]
 
@@ -42,7 +42,7 @@ export const FileUpload = () => {
     const inputRef = useRef<InputRef>(null)
 
     useEffect(() => {
-        if (submitTimestamp) {
+        if (submitTimestamp.current) {
             if (submissions.find(e => e.name === inputRef?.current?.input?.value)) {
                 //    new data came
                 submitTimestamp.current = undefined;
