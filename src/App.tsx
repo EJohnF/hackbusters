@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import logo from './logo.svg';
 import './App.css';
-import {Data} from "./data/type";
+import {Data, Submission} from "./data/type";
 import {fetchData} from "./data";
 import {SubmissionsTable} from "./components/submissions-table";
 import {Layout, Spin} from "antd";
@@ -10,7 +10,7 @@ import {FileUpload} from "./components/file-upload";
 import Charts from './components/charts'
 
 function App() {
-  const [data,setData] = useState<Data>()
+  const [data,setData] = useState<Submission[]>()
   useEffect(() => {
     fetchData().then(setData)
   }, [])
@@ -22,7 +22,7 @@ function App() {
               maxWidth: '850px'
           }}>
               <Charts />
-              {data ? <SubmissionsTable {...data} /> : <Spin size={'large'}/>}
+              {data ? <SubmissionsTable submissions={data} numberOfRuns={100} /> : <Spin size={'large'}/>}
               <FileUpload />
           </Layout.Content>
     </div>

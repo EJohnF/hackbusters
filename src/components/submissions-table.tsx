@@ -20,10 +20,10 @@ const columns: ColumnsType<EvaluatedSubmission> = [
         sorter: (a, b) => a.score - b.score,
     },
     {
-        title: 'Consumption',
-        dataIndex: 'consumption',
-        key: 'consumption',
-        sorter: (a, b) => a.consumption - b.consumption,
+        title: 'Emissions',
+        dataIndex: 'emissions',
+        key: 'emissions',
+        sorter: (a, b) => a.emissions - b.emissions,
     },
     {
         title: 'Aggregated',
@@ -44,7 +44,7 @@ export const SubmissionsTable = (data: Data) => {
     const evaluatedSubmissions = useMemo(() => {
         const bestScore = data.submissions.sort((a,b) => b.score - a.score)[0];
         const evaluated = data.submissions.map((submission) => ({
-            ...evaluateSubmission(submission, bestScore, data.numberOfRuns),
+            ...evaluateSubmission(submission, bestScore, data.numberOfRuns || 1),
         }));
         const bestAggregated = evaluated.sort((a, b) => b.aggregatedScore - a.aggregatedScore)[0]
 

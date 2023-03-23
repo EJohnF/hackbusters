@@ -3,6 +3,7 @@ import { UploadOutlined } from "@ant-design/icons";
 import Title from "antd/es/typography/Title";
 import React, { useRef, useState } from "react";
 import { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
+import {serverLink} from "../data/server";
 
 const defaultFiles = [
     {
@@ -46,13 +47,9 @@ export const FileUpload = () => {
 
         const formData = new FormData();
         formData.append('file', fileList[0] as RcFile);
-        console.log(fileList, inputRef?.current?.input?.value);
-        // fileList.forEach((file) => {
-        //     console.log(file, fileList);
-        // });
         setUploading(true);
         // You can use any AJAX library you like
-        fetch(`https://nine-items-sniff-34-145-225-193.loca.lt/submission?name_solution=${inputRef?.current?.input?.value}`, {
+        fetch(`${serverLink}/submission?name_solution=${inputRef?.current?.input?.value}`, {
             method: 'POST',
             body: formData,
             headers: {

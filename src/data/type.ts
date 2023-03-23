@@ -1,10 +1,10 @@
 export interface Submission {
     name: string;
     score: number;
-    consumption: number;
+    emissions: number;
 }
 
 export interface Data {
     submissions: Submission[];
-    numberOfRuns: number;
+    numberOfRuns?: number;
 }
