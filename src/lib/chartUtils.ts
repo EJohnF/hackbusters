@@ -31,8 +31,8 @@ export function numbers(config) {
     let i, value
 
     for (i = 0; i < count; ++i) {
-        value = (from[i] || 0) + this.rand(min, max)
-        if (this.rand() <= continuity) {
+        value = (from[i] || 0) + rand(min, max)
+        if (rand() <= continuity) {
             data.push(Math.round(dfactor * value) / dfactor)
         } else {
             data.push(null)
@@ -43,13 +43,13 @@ export function numbers(config) {
 }
 
 export function points(config) {
-    const xs = this.numbers(config)
-    const ys = this.numbers(config)
+    const xs = numbers(config)
+    const ys = numbers(config)
     return xs.map((x, i) => ({ x, y: ys[i] }))
 }
 
 export function bubbles(config) {
-    return this.points(config).map((pt) => {
+    return points(config).map((pt) => {
         pt.r = this.rand(config.rmin, config.rmax)
         return pt
     })
