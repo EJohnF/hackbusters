@@ -1,9 +1,10 @@
-import {Button, Upload, message, Input, InputRef, Progress, Dropdown} from "antd";
+import {Button, Upload, message, Input, InputRef, Progress, Dropdown, Spin} from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import Title from "antd/es/typography/Title";
 import React, { useRef, useState } from "react";
 import { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
 import {serverLink} from "../data/server";
+import {fetchData} from "../data";
 
 const defaultFiles = [
     {
@@ -35,7 +36,7 @@ export const FileUpload = () => {
 
     const inputRef = useRef<InputRef>(null)
 
-    const handleUpload = () => {
+    const handleUpload = async () => {
         if (!inputRef?.current?.input?.value) {
             message.error('Please type in team name');
             return;
@@ -49,6 +50,7 @@ export const FileUpload = () => {
         formData.append('file', fileList[0] as RcFile);
         setUploading(true);
         // You can use any AJAX library you like
+        const initialSubmissions = (await fetchData()).length;
         fetch(`${serverLink}/submission?name_solution=${inputRef?.current?.input?.value}`, {
             method: 'POST',
             body: formData,
@@ -56,19 +58,26 @@ export const FileUpload = () => {
                 "Bypass-Tunnel-Reminder": 'true'
             },
         })
-            .then((res) => res.json())
-            .then(() => {
-                setFileList([]);
-                message.success('Submitted successfully.');
-            })
-            .catch((e) => {
-                message.error('Submit failed.');
-                console.error('Error while submitting', e)
-            })
-            .finally(() => {
+        let timeoutCounter = 24;
+        const interval = setInterval(async () => {
+            const numSubmissions = (await fetchData()).length;
+            if (numSubmissions > initialSubmissions) {
                 setUploading(false);
-            });
+                clearInterval(interval)
+                message.success('Submitted successfully.')
+                return;
+            }
+
+            timeoutCounter--;
+            if (timeoutCounter <= 0) {
+                clearInterval(interval);
+                setUploading(false);
+                message.error('Submit failed.')
+            }
+        }, 5000)
     };
+
+    if (uploading) return <Spin size={'large'} />
 
     return (
         <div style={{ display: 'flex', flexDirection: "column", gap: '8px' }}>
