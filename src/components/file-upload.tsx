@@ -35,7 +35,7 @@ export const FileUpload = () => {
         // });
         setUploading(true);
         // You can use any AJAX library you like
-        fetch(`https://nine-items-sniff-34-145-225-193.loca.lt/submission?name_solution=${inputRef?.current?.input?.value}`, {
+        fetch(`https://curly-pants-scream-34-87-61-9.loca.lt/submission?name_solution=${inputRef?.current?.input?.value}`, {
             method: 'POST',
             body: formData,
             headers: {
