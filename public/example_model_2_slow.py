@@ -39,4 +39,5 @@ def check_soluiton(input_df_name):
         batch_probas = compute_batch(batch_files, transform, model)
         pred_l.append(batch_probas.cpu())
     df['predictions'] = np.vstack(pred_l)
+    del model
     df.to_csv('predict_submission.csv')
