@@ -7,7 +7,7 @@ import { CategoryScale } from 'chart.js'
 const DATA_COUNT = 4
 const NUMBER_CFG = { count: DATA_COUNT, min: 0, max: 1 }
 
-const labels = [...Array(DATA_COUNT).keys()].filter((v) => v > 0)
+const labels = [1, 2, 3, 4, 5, 6, 7].filter((v) => v > 0)
 
 const data = {
     labels: labels,
@@ -20,7 +20,7 @@ const data = {
             borderColor: Utils.CHART_COLORS.red,
             backgroundColor: Utils.transparentize(Utils.CHART_COLORS.red, 0.5),
             yAxisID: 'y',
-            cubicInterpolationMode: 'monotone',
+            cubicInterpolationMode: 'monotone' as const,
             tension: 0.4
         }
     ]
