@@ -1,7 +1,8 @@
 export interface Submission {
     name: string;
-    score: number;
+    accuracy: number;
     emissions: number;
+    score: number;
 }
 
 export interface Data {
