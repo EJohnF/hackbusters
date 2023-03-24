@@ -1,4 +1,4 @@
-import {Submission} from "./type";
+import { Submission } from "./type";
 
 export type EvaluatedSubmission = Submission & {
     co2Safe: number;
@@ -11,3 +11,6 @@ export const evaluateSubmission = (submission: Submission, benchmark: Submission
         co2Safe: (benchmark.emissions - submission.emissions) * multiplier
     }
 }
+
+export const calculateScore = (accuracy: number, emissions: number): number =>
+    (Math.pow(accuracy, 11) / emissions)

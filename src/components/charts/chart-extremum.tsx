@@ -4,6 +4,7 @@ import * as Utils from '../../lib/chartUtils'
 import Chart1 from 'chart.js/auto'
 import { CategoryScale } from 'chart.js'
 import { useSubmissions } from "../../data/data-context";
+import { calculateScore } from '../../data/calculations'
 
 const DATA_COUNT = 4
 const NUMBER_CFG = { count: DATA_COUNT, min: 0, max: 1 }
@@ -51,7 +52,7 @@ const Chart: React.FC = () => {
         const submissionsSorted = submissions.sort((a, b) => b.score - a.score);
         let dataY: number[] = [];
         [...submissionsSorted].sort((a, b) => b.accuracy - a.accuracy).forEach(v => {
-            dataY.push((Math.pow(v.accuracy, 11) / v.emissions)) /*/ v.emissions*/
+            dataY.push(calculateScore(v.accuracy, v.emissions)) /*/ v.emissions*/
         });
         setData({
             ...data,
