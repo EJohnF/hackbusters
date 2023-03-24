@@ -10,19 +10,20 @@ import {RcFile} from "antd/es/upload/interface";
 const countries = [
     {
         key: '1',
-        label: 'China',
+        label: 'Germany',
         coef: 1
     },
     {
         key: '2',
-        label: 'USA',
-        coef: 1
+        label: 'China',
+        coef: 2
     },
     {
         key: '3',
-        label: 'Germany',
-        coef: 1
+        label: 'USA',
+        coef: 1.25
     },
+
 ]
 
 export const SubmissionsTable = () => {
@@ -31,7 +32,8 @@ export const SubmissionsTable = () => {
     const [clients, setClients] = useState(100);
     const evaluatedSubmissions = useMemo(() => {
         const bestScore = submissions.sort((a,b) => b.accuracy - a.accuracy)[0];
-        const evaluated = submissions.map((submission) => ({
+        const evaluated =
+            submissions.map(e => ({...e, emissions: e.emissions * country.coef})).map((submission) => ({
             ...evaluateSubmission(submission, bestScore, clients || 1),
         }));
         const bestAggregated = evaluated.sort((a, b) => b.score - a.score)[0]
