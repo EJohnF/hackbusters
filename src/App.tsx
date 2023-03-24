@@ -33,7 +33,7 @@ function App() {
     }])
   useEffect(() => {
     const interval = setInterval(() => {
-      fetchData().then((newData) => setData([...data, ...newData]))
+      fetchData().then((newData) => setData([...newData]))
     }, 5000);
     return () => {
       clearInterval(interval);

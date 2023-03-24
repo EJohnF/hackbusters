@@ -51,7 +51,7 @@ const Chart: React.FC = () => {
         const submissionsSorted = submissions.sort((a, b) => b.score - a.score);
         let dataY: number[] = [];
         [...submissionsSorted].sort((a, b) => b.accuracy - a.accuracy).forEach(v => {
-            dataY.push((v.score) /*/ v.emissions*/);
+            dataY.push((Math.pow(v.accuracy, 11) / v.emissions)) /*/ v.emissions*/
         });
         setData({
             ...data,
