@@ -1,52 +1,38 @@
-import {Table, Typography} from "antd";
+import {Button, Dropdown, Input, InputNumber, Table, Typography} from "antd";
 import {Data} from "../data/type";
-import {useMemo} from "react";
+import React, {useMemo, useState} from "react";
 import {EvaluatedSubmission, evaluateSubmission} from "../data/calculations";
 import {ColumnsType} from "antd/lib/table";
 import Paragraph from "antd/es/typography/Paragraph";
 import {useSubmissions} from "../data/data-context";
+import {RcFile} from "antd/es/upload/interface";
 
-const columns: ColumnsType<EvaluatedSubmission> = [
+const countries = [
     {
-        title: 'Team name',
-        dataIndex: 'name',
-        key: 'name',
-        sorter: (a, b) => a.name.length - b.name.length,
+        key: '1',
+        label: 'China',
+        coef: 1
     },
     {
-        title: 'Accuracy',
-        dataIndex: 'accuracy',
-        key: 'accuracy',
-        defaultSortOrder: 'descend',
-        sorter: (a, b) => a.accuracy - b.accuracy,
+        key: '2',
+        label: 'USA',
+        coef: 1
     },
     {
-        title: 'Emissions',
-        dataIndex: 'emissions',
-        key: 'emissions',
-        sorter: (a, b) => a.emissions - b.emissions,
+        key: '3',
+        label: 'Germany',
+        coef: 1
     },
-    {
-        title: 'Score',
-        dataIndex: 'score',
-        key: 'score',
-        sorter: (a, b) => a.score - b.score,
-    },
-    {
-        title: 'CO2 safe',
-        dataIndex: 'co2Safe',
-        key: 'co2Safe',
-        sorter: (a, b) => a.co2Safe - b.co2Safe,
-        render: (_, submission) => <Paragraph key={`co2Safe_${submission.name}`} type={submission.isBest ? "success": undefined}>{submission.co2Safe} {submission.isBest ? <img src={require('./leaf.png')} alt={'leaf'} style={{width: '16px', height: '16px'}}/>: null}</Paragraph>
-    },
-];
+]
 
-export const SubmissionsTable = ({numberOfRuns}: {numberOfRuns: number}) => {
+export const SubmissionsTable = () => {
     const submissions = useSubmissions();
+    const [country, setCountry] = useState<typeof countries[number]>(countries[0]);
+    const [clients, setClients] = useState(100);
     const evaluatedSubmissions = useMemo(() => {
         const bestScore = submissions.sort((a,b) => b.accuracy - a.accuracy)[0];
         const evaluated = submissions.map((submission) => ({
-            ...evaluateSubmission(submission, bestScore, numberOfRuns || 1),
+            ...evaluateSubmission(submission, bestScore, clients || 1),
         }));
         const bestAggregated = evaluated.sort((a, b) => b.score - a.score)[0]
 
@@ -54,7 +40,60 @@ export const SubmissionsTable = ({numberOfRuns}: {numberOfRuns: number}) => {
             ...submission,
             isBest: submission.name === bestAggregated.name
         })))
-    }, [submissions, numberOfRuns]);
+    }, [submissions, clients]);
 
-    return <Table dataSource={evaluatedSubmissions} columns={columns} />;
+    const columns: ColumnsType<EvaluatedSubmission> = useMemo(() => [
+        {
+            title: 'Team name',
+            dataIndex: 'name',
+            key: 'name',
+            sorter: (a, b) => a.name.length - b.name.length,
+        },
+        {
+            title: 'Accuracy',
+            dataIndex: 'accuracy',
+            key: 'accuracy',
+            defaultSortOrder: 'descend',
+            sorter: (a, b) => a.accuracy - b.accuracy,
+        },
+        {
+            title: 'Emissions',
+            dataIndex: 'emissions',
+            key: 'emissions',
+            sorter: (a, b) => a.emissions - b.emissions,
+        },
+        {
+            title: 'Score',
+            dataIndex: 'score',
+            key: 'score',
+            sorter: (a, b) => a.score - b.score,
+        },
+        {
+            title: 'CO2 safe',
+            dataIndex: 'co2Safe',
+            key: 'co2Safe',
+            sorter: (a, b) => a.co2Safe - b.co2Safe,
+            render: (_, submission) => <Paragraph key={`co2Safe_${submission.name}`} type={submission.isBest ? "success": undefined}>{submission.co2Safe} {submission.isBest ? <img src={require('./leaf.png')} alt={'leaf'} style={{width: '16px', height: '16px'}}/>: null}</Paragraph>
+        },
+    ], []);
+
+    return (
+        <>
+            <Table dataSource={evaluatedSubmissions} columns={columns}
+                   caption={<span style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: '4px', marginBottom: '8px'}}>Country:
+                       <Dropdown
+                           menu={{
+                               items: countries,
+                               onClick: async ({key, domEvent}) => {
+                                   domEvent.stopPropagation();
+                                   setCountry(countries.find(e => e.key === key)!)
+                               },
+                           }}
+                           placement="bottomLeft"
+                           arrow
+                       >
+                    <Button onClick={(e) => e.stopPropagation()}>{country.label}</Button>
+                </Dropdown>Number of client: <InputNumber<number> min={1} max={1000000000} placeholder={'Number of clients'} onChange={(e) => setClients(e || 100)} value={clients}/></span>}/>
+        </>
+    )
 }
