@@ -29,7 +29,7 @@ function App() {
               maxWidth: '850px'
           }}>
               <Charts />
-              {data ? <SubmissionsTable numberOfRuns={100} /> : <Spin size={'large'}/>}
+              {data ? <SubmissionsTable /> : <Spin size={'large'}/>}
               <FileUpload />
           </Layout.Content>
         </DataContext.Provider>
