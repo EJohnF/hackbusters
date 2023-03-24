@@ -42,7 +42,7 @@ export const SubmissionsTable = () => {
             ...submission,
             isBest: submission.name === bestAggregated.name
         })))
-    }, [submissions, clients]);
+    }, [submissions, clients, country]);
 
     const columns: ColumnsType<EvaluatedSubmission> = useMemo(() => [
         {
