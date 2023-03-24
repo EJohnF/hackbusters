@@ -34,7 +34,6 @@ const Chart: React.FC = () => {
     })
     const submissions = useSubmissions();
     useEffect(() => {
-        console.log('submissions', submissions)
         const submissionsSorted = submissions.sort((a, b) => b.accuracy - a.accuracy);
         let dataY: number[] = [], dataY1: number[] = [];
         submissionsSorted.forEach(v => {
@@ -72,7 +71,7 @@ const Chart: React.FC = () => {
                 display: true,
                 title: {
                     display: true,
-                    text: 'position'
+                    text: 'Leaderboard position'
                 }
             },
             y: {
@@ -81,7 +80,7 @@ const Chart: React.FC = () => {
                 position: 'left' as const,
                 title: {
                     display: true,
-                    text: 'probability'
+                    text: 'Accuracy'
                 }
             },
             y1: {

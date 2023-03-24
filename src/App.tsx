@@ -12,7 +12,6 @@ import { DataContext } from "./data/data-context";
 
 function App() {
   const [data, setData] = useState<Submission[]>([
-
     {
       name: 'model_2',
       accuracy: 0.88,
@@ -31,9 +30,11 @@ function App() {
       emissions: 0.0006148717493697,
       score: +(0.9031847133757962 / 0.0006148717493697).toFixed(3)
     }])
+
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const interval = setInterval(() => {
-      fetchData().then((newData) => setData([...newData]))
+      fetchData().then((newData) => setData([...newData])).finally(() => setLoading(false))
     }, 5000);
     return () => {
       clearInterval(interval);
@@ -47,8 +48,7 @@ function App() {
           margin: '50px auto',
           maxWidth: '850px'
         }}>
-          <Charts />
-          {data ? <SubmissionsTable /> : <Spin size={'large'} />}
+          {loading ? <Spin size={'large'} />: <><Charts /><SubmissionsTable /></>}
           <FileUpload />
         </Layout.Content>
       </DataContext.Provider>

@@ -1,4 +1,4 @@
-import {Button, Upload, message, Input, InputRef, Progress, Dropdown, Spin} from "antd";
+import {Button, Upload, message, Input, InputRef, Progress, Dropdown, Spin, Collapse} from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import Title from "antd/es/typography/Title";
 import React, {useEffect, useRef, useState} from "react";
@@ -29,11 +29,15 @@ const defaultFiles = [
 const prepareExampleUploadFile = async (filename: string) => {
     const file = await fetch(filename);
     const text = await file.text();
-    return new File([text], filename)
+    return {
+        file: new File([text], filename),
+        text,
+    }
 }
 
 export const FileUpload = () => {
     const [fileList, setFileList] = useState<RcFile[]>([]);
+    const [modelText, setModelText] = useState<string>();
     const [uploading, setUploading] = useState(false);
 
     const submissions = useSubmissions();
@@ -113,7 +117,9 @@ export const FileUpload = () => {
                             onClick: async ({key, domEvent}) => {
                                 domEvent.stopPropagation();
                                 const file = defaultFiles.find(e => e.key === key)?.file
-                                setFileList([(await prepareExampleUploadFile(file!)) as RcFile]);
+                                const newFile = (await prepareExampleUploadFile(file!))
+                                setFileList([newFile.file as RcFile]);
+                                setModelText(newFile.text)
                             },
                         }}
                         placement="bottomLeft"
@@ -123,6 +129,11 @@ export const FileUpload = () => {
                     </Dropdown>
                     </div>
                 </Upload>
+            {modelText && <Collapse>
+                <Collapse.Panel header="Model source code" key="1">
+                    <pre style={{textAlign: 'left'}}>{modelText}</pre>
+                </Collapse.Panel>
+            </Collapse>}
         </div>
     )
 }

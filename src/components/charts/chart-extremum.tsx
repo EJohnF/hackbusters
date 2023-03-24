@@ -80,7 +80,7 @@ const Chart: React.FC = () => {
                 display: true,
                 title: {
                     display: true,
-                    text: 'Submissions'
+                    text: 'Leaderboard position'
                 }
             },
             y: {
