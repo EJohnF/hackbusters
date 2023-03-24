@@ -35,7 +35,7 @@ const Chart: React.FC = () => {
     const submissions = useSubmissions();
     useEffect(() => {
         console.log('submissions', submissions)
-        const submissionsSorted = submissions.sort((a, b) => b.score - a.score);
+        const submissionsSorted = submissions.sort((a, b) => b.accuracy - a.accuracy);
         let dataY: number[] = [], dataY1: number[] = [];
         submissionsSorted.forEach(v => {
             dataY.push(+v.accuracy);

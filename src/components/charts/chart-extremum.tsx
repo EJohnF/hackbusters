@@ -50,8 +50,8 @@ const Chart: React.FC = () => {
         console.log('submissions', submissions)
         const submissionsSorted = submissions.sort((a, b) => b.score - a.score);
         let dataY: number[] = [];
-        submissionsSorted.forEach(v => {
-            dataY.push((v.score * Math.tan(v.accuracy)) /*/ v.emissions*/);
+        [...submissionsSorted].sort((a, b) => b.accuracy - a.accuracy).forEach(v => {
+            dataY.push((v.score) /*/ v.emissions*/);
         });
         setData({
             ...data,
