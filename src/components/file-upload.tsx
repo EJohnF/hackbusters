@@ -62,7 +62,7 @@ export const FileUpload = () => {
 
     const handleUpload = async () => {
         if (!inputRef?.current?.input?.value) {
-            message.error('Please type in team name');
+            message.error('Please type in model name');
             return;
         }
         if (!fileList.length) {
@@ -92,7 +92,7 @@ export const FileUpload = () => {
         <div style={{ display: 'flex', flexDirection: "column", gap: '8px' }}>
             <Title level={3}>Upload your model to compete with others!</Title>
             <div style={{ display: "flex", flexDirection: 'row', gap: '10px' }}>
-                <Input ref={inputRef} placeholder={"Team name"} />
+                <Input ref={inputRef} placeholder={"Model name"} />
                 <Button onClick={handleUpload}>Submit</Button>
             </div>
                 <Upload {...{
