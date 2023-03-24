@@ -8,6 +8,7 @@ export type EvaluatedSubmission = Submission & {
 export const evaluateSubmission = (submission: Submission, benchmark: Submission, multiplier: number): EvaluatedSubmission => {
     return {
         ...submission,
+        score: calculateScore(submission.accuracy, submission.emissions),
         co2Safe: (benchmark.emissions - submission.emissions) * multiplier
     }
 }

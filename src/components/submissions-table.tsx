@@ -34,7 +34,7 @@ const columns: ColumnsType<EvaluatedSubmission> = [
         sorter: (a, b) => a.score - b.score,
     },
     {
-        title: 'CO2 safe',
+        title: 'CO2 saved',
         dataIndex: 'co2Safe',
         key: 'co2Safe',
         sorter: (a, b) => a.co2Safe - b.co2Safe,
@@ -64,7 +64,7 @@ const countries = [
 export const SubmissionsTable = () => {
     const submissions = useSubmissions();
     const [country, setCountry] = useState<typeof countries[number]>(countries[0]);
-    const [clients, setClients] = useState(100);
+    const [clients, setClients] = useState(10000);
     const evaluatedSubmissions = useMemo(() => {
         const bestScore = submissions.sort((a,b) => b.accuracy - a.accuracy)[0];
         const evaluated =
@@ -79,7 +79,7 @@ export const SubmissionsTable = () => {
             accuracy: Number(submission.accuracy.toFixed(3)),
             score: Number(submission.score.toFixed(3)),
             emissions: Number(submission.emissions.toFixed(6)),
-            co2Safe: Number(submission.co2Safe.toFixed(5)),
+            co2Safe: Number(submission.co2Safe.toFixed(2)),
             isBest: submission.name === bestAggregated.name
         })))
     }, [submissions, clients, country]);
