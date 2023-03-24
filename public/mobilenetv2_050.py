@@ -25,7 +25,7 @@ def check_soluiton(input_df_name):
     from timm.data.transforms_factory import create_transform
     from timm.data import resolve_data_config
  
-    model = timm.create_model('maxxvitv2_nano_rw_256.sw_in1k', pretrained = True).cuda()
+    model = timm.create_model('mobilenetv2_050', pretrained = True).cuda()
     model.eval()
     transform = create_transform(**resolve_data_config(model.pretrained_cfg, model=model))
     l_data = df.imgs_path

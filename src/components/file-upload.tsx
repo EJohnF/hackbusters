@@ -9,21 +9,16 @@ import {useSubmissions} from "../data/data-context";
 import dayjs, {Dayjs} from "dayjs";
 
 const defaultFiles = [
+    // {
+    //     key: '1',
+    //     label: 'mnasnet_small',
+    //     file: '/mnasnet_small.py'
+    // },
     {
         key: '1',
-        label: 'Normal',
-        file: '/example_model.py'
-    },
-    {
-        key: '2',
-        label: 'Slow',
-        file: '/example_model_2_slow.py'
-    },
-    {
-        key: '3',
-        label: 'Super fast',
-        file: '/example_model_3_fast.py'
-    },
+        label: 'mobilenetv2_050',
+        file: '/mobilenetv2_050.py'
+    }
 ]
 
 const prepareExampleUploadFile = async (filename: string) => {

@@ -8,6 +8,12 @@ import {useSubmissions} from "../data/data-context";
 import {RcFile} from "antd/es/upload/interface";
 
 const columns: ColumnsType<EvaluatedSubmission> = [
+    // {
+    //     title: 'Position',
+    //     dataIndex: 'position',
+    //     key: 'position',
+    //     sorter: (a, b) => a.position - b.position,
+    // },
     {
         title: 'Team name',
         dataIndex: 'name',
@@ -33,6 +39,12 @@ const columns: ColumnsType<EvaluatedSubmission> = [
         key: 'score',
         sorter: (a, b) => a.score - b.score,
     },
+    {
+        title: 'Hardware',
+        dataIndex: 'hardware',
+        key: 'hardware',
+    },
+    
     {
         title: 'CO2 saved',
         dataIndex: 'co2Safe',
@@ -73,15 +85,18 @@ export const SubmissionsTable = () => {
         }));
         const bestAggregated = evaluated.sort((a, b) => b.score - a.score)[0]
 
-        return evaluated.map((submission => ({
+        return evaluated.map(((submission) => {
+            const shortCpuModel = submission.cpu_model.substring(0, 16)
+            return {
             ...submission,
             name: submission.name.slice(0, 20),
             accuracy: Number(submission.accuracy.toFixed(3)),
             score: Number(submission.score.toFixed(3)),
             emissions: Number(submission.emissions.toFixed(6)),
             co2Safe: Number(submission.co2Safe.toFixed(2)),
+            hardware: `${submission.gpu_model} ${shortCpuModel}`,
             isBest: submission.name === bestAggregated.name
-        })))
+        }}))
     }, [submissions, clients, country]);
 
     return (

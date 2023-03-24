@@ -9,5 +9,7 @@ export async function fetchData(): Promise<Data['submissions']> {
         accuracy: e.accuracy,
         emissions: e.emissions,
         score: Number((e.accuracy / e.emissions).toFixed(3)),
+        gpu_model: e.gpu_model,
+        cpu_model: e.cpu_model
     })) as Data['submissions']
 }

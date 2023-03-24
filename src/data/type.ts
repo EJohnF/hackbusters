@@ -3,6 +3,8 @@ export interface Submission {
     accuracy: number;
     emissions: number;
     score: number;
+    gpu_model: string;
+    cpu_model: string;
 }
 
 export interface Data {

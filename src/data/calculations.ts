@@ -3,6 +3,7 @@ import { Submission } from "./type";
 export type EvaluatedSubmission = Submission & {
     co2Safe: number;
     isBest?: boolean;
+    hardware?: string;
 }
 
 export const evaluateSubmission = (submission: Submission, benchmark: Submission, multiplier: number): EvaluatedSubmission => {

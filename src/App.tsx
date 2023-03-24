@@ -16,19 +16,25 @@ function App() {
       name: 'model_2',
       accuracy: 0.88,
       emissions: 0.0004044858792713,
-      score: +(0.88 / 0.0004044858792713).toFixed(3)
+      score: +(0.88 / 0.0004044858792713).toFixed(3),
+      cpu_model: 'Intel(R) Xeon(R) CPU @ 2.20GHz',
+      gpu_model: '1 x Tesla T4'
     },
     {
       name: 'model_3',
       accuracy: 0.9335031847133758,
       emissions: 0.0014040720193948,
-      score: +(0.9335031847133758 / 0.0014040720193948).toFixed(3)
+      score: +(0.9335031847133758 / 0.0014040720193948).toFixed(3),
+      cpu_model: 'Intel(R) Xeon(R) CPU @ 2.20GHz',
+      gpu_model: '1 x Tesla T4'
     },
     {
       name: 'model_4',
       accuracy: 0.9031847133757962,
       emissions: 0.0006148717493697,
-      score: +(0.9031847133757962 / 0.0006148717493697).toFixed(3)
+      score: +(0.9031847133757962 / 0.0006148717493697).toFixed(3),
+      cpu_model: 'Intel(R) Xeon(R) CPU @ 2.20GHz',
+      gpu_model: '1 x Tesla T4'
     }])
 
   const [loading, setLoading] = useState(true);
