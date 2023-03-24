@@ -3,11 +3,12 @@ import { Line } from 'react-chartjs-2'
 import * as Utils from '../../lib/chartUtils'
 import Chart1 from 'chart.js/auto'
 import { CategoryScale } from 'chart.js'
+import { useSubmissions } from "../../data/data-context";
 
 const DATA_COUNT = 4
 const NUMBER_CFG = { count: DATA_COUNT, min: 0, max: 1 }
 
-const labels = [1, 2, 3, 4, 5, 6, 7].filter((v) => v > 0)
+const labels = [1, 2, 3, 4]
 
 const data = {
     labels: labels,
@@ -29,7 +30,40 @@ const data = {
 const Chart: React.FC = () => {
     Chart1.register(CategoryScale)
 
-    useEffect(() => {}, [])
+    const [data, setData] = useState({
+        labels: labels,
+        datasets: [
+            {
+                label: 'Carbon weighted score',
+                data: [] as number[],
+                borderColor: Utils.CHART_COLORS.red,
+                backgroundColor: Utils.transparentize(Utils.CHART_COLORS.red, 0.5),
+                yAxisID: 'y',
+                cubicInterpolationMode: 'monotone' as const,
+                tension: 0.4
+            }
+        ]
+    })
+
+    const submissions = useSubmissions();
+    useEffect(() => {
+        console.log('submissions', submissions)
+        const submissionsSorted = submissions.sort((a, b) => b.score - a.score);
+        let dataY: number[] = [];
+        submissionsSorted.forEach(v => {
+            dataY.push((v.score * Math.tan(v.accuracy)) /*/ v.emissions*/);
+        });
+        setData({
+            ...data,
+            labels: Array(submissions.length).fill(1).map((_, k) => k + 1),
+            datasets: [
+                {
+                    ...data.datasets[0],
+                    data: [...dataY]
+                }
+            ]
+        })
+    }, [submissions])
 
     const options = {
         maintainAspectRatio: false,
