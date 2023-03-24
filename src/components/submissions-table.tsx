@@ -75,6 +75,7 @@ export const SubmissionsTable = () => {
 
         return evaluated.map((submission => ({
             ...submission,
+            name: submission.name.slice(0, 20),
             accuracy: Number(submission.accuracy.toFixed(3)),
             score: Number(submission.score.toFixed(3)),
             emissions: Number(submission.emissions.toFixed(6)),
@@ -85,7 +86,7 @@ export const SubmissionsTable = () => {
 
     return (
         <>
-            <Table dataSource={evaluatedSubmissions} columns={columns}
+            <Table pagination={{pageSize: 25}} dataSource={evaluatedSubmissions} columns={columns}
                    caption={<span style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: '4px', marginBottom: '8px'}}>Country:
                        <Dropdown
                            menu={{
