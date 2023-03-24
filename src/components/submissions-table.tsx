@@ -7,6 +7,41 @@ import Paragraph from "antd/es/typography/Paragraph";
 import {useSubmissions} from "../data/data-context";
 import {RcFile} from "antd/es/upload/interface";
 
+const columns: ColumnsType<EvaluatedSubmission> = [
+    {
+        title: 'Team name',
+        dataIndex: 'name',
+        key: 'name',
+        sorter: (a, b) => a.name.length - b.name.length,
+    },
+    {
+        title: 'Accuracy',
+        dataIndex: 'accuracy',
+        key: 'accuracy',
+        defaultSortOrder: 'descend',
+        sorter: (a, b) => a.accuracy - b.accuracy,
+    },
+    {
+        title: 'Emissions',
+        dataIndex: 'emissions',
+        key: 'emissions',
+        sorter: (a, b) => a.emissions - b.emissions,
+    },
+    {
+        title: 'Score',
+        dataIndex: 'score',
+        key: 'score',
+        sorter: (a, b) => a.score - b.score,
+    },
+    {
+        title: 'CO2 safe',
+        dataIndex: 'co2Safe',
+        key: 'co2Safe',
+        sorter: (a, b) => a.co2Safe - b.co2Safe,
+        render: (_, submission) => <Paragraph key={`co2Safe_${submission.name}`} type={submission.isBest ? "success": undefined}>{submission.co2Safe} {submission.isBest ? <img src={require('./leaf.png')} alt={'leaf'} style={{width: '16px', height: '16px'}}/>: null}</Paragraph>
+    },
+];
+
 const countries = [
     {
         key: '1',
@@ -34,50 +69,19 @@ export const SubmissionsTable = () => {
         const bestScore = submissions.sort((a,b) => b.accuracy - a.accuracy)[0];
         const evaluated =
             submissions.map(e => ({...e, emissions: e.emissions * country.coef})).map((submission) => ({
-            ...evaluateSubmission(submission, bestScore, clients || 1),
+            ...evaluateSubmission(submission, {...bestScore, emissions: bestScore.emissions * country.coef}, clients || 1),
         }));
         const bestAggregated = evaluated.sort((a, b) => b.score - a.score)[0]
 
         return evaluated.map((submission => ({
             ...submission,
+            accuracy: Number(submission.accuracy.toFixed(3)),
+            score: Number(submission.score.toFixed(3)),
+            emissions: Number(submission.emissions.toFixed(6)),
+            co2Safe: Number(submission.co2Safe.toFixed(5)),
             isBest: submission.name === bestAggregated.name
         })))
     }, [submissions, clients, country]);
-
-    const columns: ColumnsType<EvaluatedSubmission> = useMemo(() => [
-        {
-            title: 'Team name',
-            dataIndex: 'name',
-            key: 'name',
-            sorter: (a, b) => a.name.length - b.name.length,
-        },
-        {
-            title: 'Accuracy',
-            dataIndex: 'accuracy',
-            key: 'accuracy',
-            defaultSortOrder: 'descend',
-            sorter: (a, b) => a.accuracy - b.accuracy,
-        },
-        {
-            title: 'Emissions',
-            dataIndex: 'emissions',
-            key: 'emissions',
-            sorter: (a, b) => a.emissions - b.emissions,
-        },
-        {
-            title: 'Score',
-            dataIndex: 'score',
-            key: 'score',
-            sorter: (a, b) => a.score - b.score,
-        },
-        {
-            title: 'CO2 safe',
-            dataIndex: 'co2Safe',
-            key: 'co2Safe',
-            sorter: (a, b) => a.co2Safe - b.co2Safe,
-            render: (_, submission) => <Paragraph key={`co2Safe_${submission.name}`} type={submission.isBest ? "success": undefined}>{submission.co2Safe} {submission.isBest ? <img src={require('./leaf.png')} alt={'leaf'} style={{width: '16px', height: '16px'}}/>: null}</Paragraph>
-        },
-    ], []);
 
     return (
         <>
